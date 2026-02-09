@@ -17,6 +17,20 @@ body {
   overflow: hidden;
 }
 
+/* Tap overlay */
+#tapScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  z-index: 999;
+  cursor: pointer;
+}
+
 .container {
   background: white;
   padding: 25px;
@@ -41,13 +55,11 @@ p {
   margin: 20px 0;
 }
 
-/* Buttons wrapper */
 .buttons {
   position: relative;
   height: 60px;
 }
 
-/* Common button style */
 button {
   padding: 12px 26px;
   border: none;
@@ -57,7 +69,6 @@ button {
   top: 0;
 }
 
-/* YES */
 .yes {
   background: #ff4d6d;
   color: white;
@@ -66,7 +77,6 @@ button {
   cursor: pointer;
 }
 
-/* NO */
 .no {
   background: #ccc;
   left: 50%;
@@ -92,9 +102,16 @@ button {
 
 <body>
 
-<!-- Background Music -->
+<!-- TAP SCREEN -->
+<div id="tapScreen">Tap anywhere 💖</div>
+
+<!-- MUSIC -->
 <audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/04/06/audio_34f8cba0c7.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5f2d43db3b.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="heartBeat">
+  <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_8b2c9d56b7.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container" id="card">
@@ -124,11 +141,15 @@ button {
 </div>
 
 <script>
-/* Music – guaranteed to work */
-const music = document.getElementById("bgMusic");
-document.body.addEventListener("click", () => {
-  music.play();
-}, { once: true });
+/* Start music after tap */
+const tapScreen = document.getElementById("tapScreen");
+const bgMusic = document.getElementById("bgMusic");
+const heartBeat = document.getElementById("heartBeat");
+
+tapScreen.addEventListener("click", () => {
+  bgMusic.play();
+  tapScreen.style.display = "none";
+});
 
 /* Floating hearts */
 setInterval(() => {
@@ -141,29 +162,24 @@ setInterval(() => {
   setTimeout(() => heart.remove(), 6000);
 }, 500);
 
-/* NO button logic — BULLETPROOF */
+/* NO button escape */
 const noBtn = document.getElementById("noBtn");
-
 function escapeNo() {
   const x = Math.random() * 200 - 100;
   const y = Math.random() * 80 - 40;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
-
-/* Move BEFORE click */
-noBtn.addEventListener("mouseenter", escapeNo);
-noBtn.addEventListener("touchstart", escapeNo);
-noBtn.addEventListener("mousedown", escapeNo);
-
-/* Hard block click */
-noBtn.addEventListener("click", (e) => {
+["mouseenter", "mousedown", "touchstart"].forEach(evt =>
+  noBtn.addEventListener(evt, escapeNo)
+);
+noBtn.addEventListener("click", e => {
   e.preventDefault();
   e.stopPropagation();
-  escapeNo();
 });
 
 /* YES click */
 document.getElementById("yesBtn").addEventListener("click", () => {
+  heartBeat.play();
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
