@@ -6,49 +6,52 @@
 <title>For My Love ❤️</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  height: 100vh;
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
   overflow: hidden;
 }
 
-/* First screen */
-#startScreen button {
+/* ===== Start Screen ===== */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  z-index: 10;
+}
+
+#startBtn {
   background: #ff4d6d;
   color: white;
   border: none;
-  padding: 16px 28px;
-  border-radius: 30px;
-  font-size: 18px;
+  padding: 18px 34px;
+  border-radius: 40px;
+  font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
-#startScreen button {
-  background: #ff4d6d;
-  color: white;
-  border: none;
-  padding: 16px 30px;
-  border-radius: 30px;
-  font-size: 18px;
-  cursor: pointer;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-}
-
-/* Main card */
+/* ===== Main Card ===== */
 .container {
+  display: none;
   background: white;
+  margin: auto;
+  margin-top: 8vh;
   padding: 25px;
   border-radius: 20px;
   max-width: 420px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 h1 {
@@ -60,7 +63,7 @@ p {
   line-height: 1.6;
 }
 
-/* 💓 Slow heartbeat animation */
+/* Heartbeat question */
 @keyframes heartbeat {
   0% { transform: scale(1); }
   20% { transform: scale(1.04); }
@@ -70,19 +73,20 @@ p {
 }
 
 .question {
+  margin: 22px 0;
   font-size: 22px;
-  color: #e63946;
   font-weight: bold;
-  margin: 20px 0;
-  animation: heartbeat 2.6s infinite;
+  color: #e63946;
+  animation: heartbeat 2.8s infinite;
 }
 
+/* Buttons */
 .buttons {
   position: relative;
   height: 60px;
 }
 
-button.choice {
+.choice {
   padding: 12px 26px;
   border: none;
   border-radius: 25px;
@@ -96,15 +100,12 @@ button.choice {
   color: white;
   left: 50%;
   transform: translateX(-120%);
-  cursor: pointer;
 }
 
 .no {
   background: #ccc;
   left: 50%;
   transform: translateX(20%);
-  cursor: pointer;
-  transition: transform 0.15s ease;
 }
 
 /* Floating hearts */
@@ -124,15 +125,15 @@ button.choice {
 
 <body>
 
-<!-- Start Screen -->
+<!-- Start screen -->
 <div id="startScreen">
   <button id="startBtn">Press with Love 💖</button>
 </div>
 
-<!-- Background music -->
+<!-- Music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
-<!-- Main Content -->
+<!-- Main content -->
 <div class="container" id="card">
   <h1>Hey My Love 💖</h1>
 
@@ -162,15 +163,16 @@ button.choice {
 </div>
 
 <script>
-/* Start button → show page + play music */
 const startBtn = document.getElementById("startBtn");
 const startScreen = document.getElementById("startScreen");
+const card = document.getElementById("card");
 const bgMusic = document.getElementById("bgMusic");
 
 startBtn.addEventListener("click", () => {
+  startScreen.style.display = "none";
+  card.style.display = "block";
   bgMusic.volume = 0.5;
   bgMusic.play();
-  startScreen.style.display = "none";
 });
 
 /* Floating hearts */
@@ -182,15 +184,15 @@ setInterval(() => {
   heart.style.fontSize = Math.random() * 20 + 14 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 500);
+}, 600);
 
-/* NO button escape */
+/* NO escape */
 const noBtn = document.getElementById("noBtn");
 function escapeNo() {
   noBtn.style.transform =
     `translate(${Math.random()*200-100}px, ${Math.random()*80-40}px)`;
 }
-["mouseenter", "mousedown", "touchstart"].forEach(e =>
+["mouseenter","touchstart","mousedown"].forEach(e =>
   noBtn.addEventListener(e, escapeNo)
 );
 noBtn.addEventListener("click", e => {
@@ -198,9 +200,9 @@ noBtn.addEventListener("click", e => {
   e.stopPropagation();
 });
 
-/* YES click */
+/* YES */
 document.getElementById("yesBtn").addEventListener("click", () => {
-  document.getElementById("card").innerHTML = `
+  card.innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
       You just made my forever complete 🤍<br><br>
