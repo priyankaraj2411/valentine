@@ -49,7 +49,7 @@ p {
   line-height: 1.6;
 }
 
-/* Question styling */
+/* Question */
 .question-wrapper {
   margin-top: 20px;
 }
@@ -74,9 +74,12 @@ p {
 
 /* Buttons */
 .buttons {
-  margin-top: 20px;
+  margin-top: 22px;
   position: relative;
   height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
@@ -90,12 +93,13 @@ button {
 .yes {
   background: #ff4d6d;
   color: white;
-  margin-right: 20px;
+  margin-right: 40px;
 }
 
 .no {
   background: #ccc;
   position: absolute;
+  left: 220px; /* initial proper alignment */
 }
 
 /* Tap hint */
@@ -107,11 +111,11 @@ button {
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
-  animation: fadeBlink 1.5s infinite;
+  animation: blink 1.5s infinite;
   z-index: 5;
 }
 
-@keyframes fadeBlink {
+@keyframes blink {
   0% { opacity: 0.4; }
   50% { opacity: 1; }
   100% { opacity: 0.4; }
@@ -121,17 +125,16 @@ button {
 
 <body>
 
-<!-- Romantic background music -->
+<!-- Romantic music -->
 <audio id="bgMusic" autoplay loop muted>
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5b8b6fdd2b.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Heartbeat sound -->
+<!-- Heartbeat -->
 <audio id="heartbeat">
   <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4e61b6c65c.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Tap hint -->
 <div class="tap-hint" id="tapHint">Tap anywhere 💖</div>
 
 <div class="container" onclick="startMusic()">
@@ -168,7 +171,7 @@ button {
 </div>
 
 <script>
-/* Music + hint logic */
+/* Music + hint */
 let musicStarted = false;
 const music = document.getElementById("bgMusic");
 const tapHint = document.getElementById("tapHint");
@@ -193,14 +196,12 @@ setInterval(() => {
   setTimeout(() => heart.remove(), 6000);
 }, 300);
 
-/* NO button behavior */
+/* NO button logic */
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 
-const originalX = 140;
-const originalY = 0;
-noBtn.style.left = originalX + "px";
-noBtn.style.top = originalY + "px";
+const originalLeft = noBtn.offsetLeft;
+const originalTop = noBtn.offsetTop;
 
 function moveNo() {
   const x = Math.random() * 200;
@@ -210,15 +211,15 @@ function moveNo() {
 }
 
 function resetNo() {
-  noBtn.style.left = originalX + "px";
-  noBtn.style.top = originalY + "px";
+  noBtn.style.left = originalLeft + "px";
+  noBtn.style.top = originalTop + "px";
 }
 
 noBtn.addEventListener("mouseover", moveNo);
 noBtn.addEventListener("touchstart", moveNo);
 yesBtn.addEventListener("mouseover", resetNo);
 
-/* YES clicked */
+/* YES click */
 function yesClicked() {
   document.getElementById("heartbeat").play();
 
