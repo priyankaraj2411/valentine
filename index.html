@@ -17,11 +17,10 @@ body {
   overflow: hidden;
 }
 
-/* Tap overlay */
 #tapScreen {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
+  background: rgba(0,0,0,0.6);
   color: white;
   display: flex;
   justify-content: center;
@@ -38,14 +37,6 @@ body {
   max-width: 420px;
   width: 90%;
   text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-h1 { color: #e63946; }
-
-p {
-  font-size: 16px;
-  line-height: 1.6;
 }
 
 .question {
@@ -74,28 +65,12 @@ button {
   color: white;
   left: 50%;
   transform: translateX(-120%);
-  cursor: pointer;
 }
 
 .no {
   background: #ccc;
   left: 50%;
   transform: translateX(20%);
-  cursor: pointer;
-  transition: transform 0.15s ease;
-}
-
-/* Floating hearts */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  animation: float 6s linear infinite;
-  opacity: 0.7;
-}
-
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-120vh); }
 }
 </style>
 </head>
@@ -104,30 +79,15 @@ button {
 
 <div id="tapScreen">Tap anywhere 💖</div>
 
-<!-- Background music -->
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5f2d43db3b.mp3">
-</audio>
-
-<!-- Heartbeat -->
-<audio id="heartbeat" loop>
-  <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_8b2c9d56b7.mp3">
-</audio>
+<audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="heartbeat" src="heartbeat.mp3" loop></audio>
 
 <div class="container" id="card">
-  <h1>Hey My Love 💖</h1>
+  <h2>Hey My Love 💖</h2>
 
   <p>
-    You are not just my love — you are my soul, my home, my forever.  
-    Tumhare bina zindagi jaise khamosh si lagti hai,  
-    jaise dil dhadak raha ho par jeena bhool gaya ho.  
-    <br><br>
-    You make my ordinary days feel special,  
-    my weakest moments feel stronger,  
-    and my future feel beautiful.  
-    <br><br>
-    Loving you isn’t a decision I made…  
-    <strong>it’s a feeling I breathe every day.</strong>
+    You are not just my love — you are my soul, my home, my forever.
+    Tumhare bina zindagi jaise khamosh si lagti hai.
   </p>
 
   <div class="question">Will you be my Valentine? ❤️</div>
@@ -137,65 +97,37 @@ button {
     <button class="no" id="noBtn">No 😜</button>
   </div>
 
-  <p style="margin-top:20px;"><strong>Yours, always<br>— Neha</strong></p>
+  <p><strong>Yours, always<br>— Neha</strong></p>
 </div>
 
 <script>
-const tapScreen = document.getElementById("tapScreen");
-const bgMusic = document.getElementById("bgMusic");
+const tap = document.getElementById("tapScreen");
+const music = document.getElementById("bgMusic");
 const heartbeat = document.getElementById("heartbeat");
 
-/* Start music + heartbeat together */
-tapScreen.addEventListener("click", () => {
-  bgMusic.volume = 0.5;
-  heartbeat.volume = 0.25;   // soft heartbeat feel
-  bgMusic.play();
+tap.onclick = () => {
+  music.volume = 0.5;
+  heartbeat.volume = 0.3;
+  music.play();
   heartbeat.play();
-  tapScreen.style.display = "none";
-});
+  tap.style.display = "none";
+};
 
-/* Floating hearts */
-setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 14 + "px";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}, 500);
-
-/* NO button escape */
 const noBtn = document.getElementById("noBtn");
-function escapeNo() {
-  const x = Math.random() * 200 - 100;
-  const y = Math.random() * 80 - 40;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-}
-["mouseenter", "mousedown", "touchstart"].forEach(e =>
-  noBtn.addEventListener(e, escapeNo)
-);
-noBtn.addEventListener("click", e => {
-  e.preventDefault();
-  e.stopPropagation();
-});
+noBtn.onmouseenter = () => {
+  noBtn.style.transform =
+    `translate(${Math.random()*200-100}px, ${Math.random()*80-40}px)`;
+};
+noBtn.onclick = e => e.preventDefault();
 
-/* YES click */
-document.getElementById("yesBtn").addEventListener("click", () => {
-  heartbeat.pause();   // stop heartbeat
-  heartbeat.currentTime = 0;
-
+document.getElementById("yesBtn").onclick = () => {
+  heartbeat.pause();
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
-    <p style="font-size:18px;">
-      You just made my forever complete 🤍<br><br>
-      Thank you for choosing me, today and for a lifetime.<br><br>
-      I promise to love you, stand by you,
-      and choose you — always.
-    </p>
+    <p>You just made my forever complete 🤍</p>
     <p><strong>— Neha</strong></p>
   `;
-});
+};
 </script>
 
 </body>
