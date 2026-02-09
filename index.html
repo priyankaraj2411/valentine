@@ -1,48 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For My Love ❤️</title>
 
 <style>
 body {
   margin: 0;
   height: 100vh;
-  overflow: hidden;
-  font-family: "Segoe UI", sans-serif;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-}
-
-/* Floating hearts */
-.heart {
-  position: fixed;
-  bottom: -20px;
-  animation: float 6s linear infinite;
-  opacity: 0.8;
-}
-
-@keyframes float {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-120vh); opacity: 0; }
+  overflow: hidden;
 }
 
 .container {
   background: white;
-  padding: 28px;
-  border-radius: 22px;
-  width: 90%;
+  padding: 25px;
+  border-radius: 20px;
   max-width: 420px;
+  width: 90%;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  position: relative;
-  z-index: 2;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
-h1 { color: #e63946; }
+h1 {
+  color: #e63946;
+}
 
 p {
   font-size: 16px;
@@ -50,29 +37,18 @@ p {
 }
 
 /* Question */
-.question-wrapper {
-  margin-top: 18px;
-}
-
 .question {
   font-size: 22px;
   color: #e63946;
   font-weight: bold;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  margin: 20px 0;
 }
 
 /* Buttons */
 .buttons {
-  margin-top: 24px;
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   position: relative;
 }
 
@@ -91,44 +67,33 @@ button {
 
 .no {
   background: #ccc;
-  position: absolute;
-  right: 0;
-  pointer-events: none; /* 🔒 NEVER clickable */
+  cursor: default;
+  pointer-events: none; /* cannot be clicked */
+  position: relative;
+  transition: transform 0.2s ease;
 }
 
-/* Tap hint */
-.tap-hint {
+/* Floating hearts */
+.heart {
   position: fixed;
-  bottom: 18px;
-  background: rgba(0,0,0,0.65);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  animation: blink 1.4s infinite;
-  z-index: 10;
+  bottom: -20px;
+  animation: float 6s linear infinite;
+  opacity: 0.7;
 }
 
-@keyframes blink {
-  0% { opacity: .4; }
-  50% { opacity: 1; }
-  100% { opacity: .4; }
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-120vh); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO (never removed) -->
-<audio id="bgMusic" preload="auto" loop>
+<!-- Music -->
+<audio id="bgMusic" loop>
   <source src="https://cdn.pixabay.com/audio/2022/04/06/audio_34f8cba0c7.mp3" type="audio/mpeg">
 </audio>
-
-<audio id="heartbeat" preload="auto">
-  <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_8f3e6b6a25.mp3" type="audio/mpeg">
-</audio>
-
-<div class="tap-hint" id="tapHint">Tap anywhere 💖</div>
 
 <div class="container" id="card">
   <h1>Hey My Love 💖</h1>
@@ -146,31 +111,21 @@ button {
     <strong>it’s a feeling I breathe every day.</strong>
   </p>
 
-  <div class="question-wrapper">
-    <div class="question">Will you be my Valentine? ❤️</div>
-  </div>
+  <div class="question">Will you be my Valentine? ❤️</div>
 
   <div class="buttons">
     <button class="yes" id="yesBtn">Yes 💖</button>
     <button class="no" id="noBtn">No 😜</button>
   </div>
 
-  <p style="margin-top:18px;"><strong>Yours, always<br>— Neha</strong></p>
+  <p style="margin-top:15px;"><strong>Yours, always<br>— Neha</strong></p>
 </div>
 
 <script>
-/* MUSIC — guaranteed */
+/* Music – simple & reliable */
 const music = document.getElementById("bgMusic");
-const heartbeat = document.getElementById("heartbeat");
-const tapHint = document.getElementById("tapHint");
-
-let started = false;
-document.addEventListener("pointerdown", () => {
-  if (!started) {
-    music.play();
-    tapHint.style.display = "none";
-    started = true;
-  }
+document.body.addEventListener("click", () => {
+  music.play();
 }, { once: true });
 
 /* Floating hearts */
@@ -179,57 +134,41 @@ setInterval(() => {
   heart.className = "heart";
   heart.innerHTML = "❤️";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 22 + 14 + "px";
+  heart.style.fontSize = Math.random() * 20 + 14 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 350);
+}, 400);
 
-/* NO button movement */
+/* NO button logic */
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 
-const originalRight = noBtn.style.right = "0px";
-
 function moveNo() {
-  noBtn.style.right = Math.random() * 140 + "px";
-  noBtn.style.top = Math.random() * 40 + "px";
+  const x = Math.random() * 60 - 30;
+  const y = Math.random() * 40 - 20;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
 function resetNo() {
-  noBtn.style.right = originalRight;
-  noBtn.style.top = "0px";
+  noBtn.style.transform = "translate(0, 0)";
 }
 
-document.addEventListener("pointermove", (e) => {
-  const rect = noBtn.getBoundingClientRect();
-  if (
-    e.clientX > rect.left - 20 &&
-    e.clientX < rect.right + 20 &&
-    e.clientY > rect.top - 20 &&
-    e.clientY < rect.bottom + 20
-  ) {
-    moveNo();
-  }
-});
-
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
 yesBtn.addEventListener("mouseenter", resetNo);
 
-/* YES */
+/* YES click */
 yesBtn.addEventListener("click", () => {
-  heartbeat.play();
-
-  setTimeout(() => {
-    document.getElementById("card").innerHTML = `
-      <h1>💍🤍</h1>
-      <p style="font-size:18px;">
-        You just made my forever complete 🤍<br><br>
-        Thank you for choosing me, today and for a lifetime.<br><br>
-        I promise to love you, stand by you,
-        and choose you — always.
-      </p>
-      <p><strong>— Neha</strong></p>
-    `;
-  }, 300);
+  document.getElementById("card").innerHTML = `
+    <h1>💍🤍</h1>
+    <p style="font-size:18px;">
+      You just made my forever complete 🤍<br><br>
+      Thank you for choosing me, today and for a lifetime.<br><br>
+      I promise to love you, stand by you,
+      and choose you — always.
+    </p>
+    <p><strong>— Neha</strong></p>
+  `;
 });
 </script>
 
