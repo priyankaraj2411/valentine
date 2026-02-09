@@ -17,6 +17,29 @@ body {
   overflow: hidden;
 }
 
+/* First screen */
+#startScreen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+#startScreen button {
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 16px 30px;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Main card */
 .container {
   background: white;
   padding: 25px;
@@ -58,17 +81,18 @@ p {
   height: 60px;
 }
 
-button {
+button.choice {
   padding: 12px 26px;
   border: none;
   border-radius: 25px;
   font-size: 16px;
+  position: absolute;
+  top: 0;
 }
 
 .yes {
   background: #ff4d6d;
   color: white;
-  position: absolute;
   left: 50%;
   transform: translateX(-120%);
   cursor: pointer;
@@ -76,23 +100,10 @@ button {
 
 .no {
   background: #ccc;
-  position: absolute;
   left: 50%;
   transform: translateX(20%);
   cursor: pointer;
   transition: transform 0.15s ease;
-}
-
-/* Music button */
-#playMusicBtn {
-  background: #ff4d6d;
-  color: white;
-  border: none;
-  padding: 10px 22px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-  cursor: pointer;
 }
 
 /* Floating hearts */
@@ -112,13 +123,17 @@ button {
 
 <body>
 
+<!-- Start Screen -->
+<div id="startScreen">
+  <button id="startBtn">Press with Love 💖</button>
+</div>
+
+<!-- Background music -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
+<!-- Main Content -->
 <div class="container" id="card">
   <h1>Hey My Love 💖</h1>
-
-  <!-- Romantic music button -->
-  <button id="playMusicBtn">Feel My Heart 💖</button>
 
   <p>
     You are not just my love — you are my soul, my home, my forever.  
@@ -136,8 +151,8 @@ button {
   <div class="question">Will you be my Valentine? ❤️</div>
 
   <div class="buttons">
-    <button class="yes" id="yesBtn">Yes 💖</button>
-    <button class="no" id="noBtn">No 😜</button>
+    <button class="choice yes" id="yesBtn">Yes 💖</button>
+    <button class="choice no" id="noBtn">No 😜</button>
   </div>
 
   <p style="margin-top:20px;">
@@ -146,14 +161,15 @@ button {
 </div>
 
 <script>
-/* Music play (mobile safe) */
+/* Start button → show page + play music */
+const startBtn = document.getElementById("startBtn");
+const startScreen = document.getElementById("startScreen");
 const bgMusic = document.getElementById("bgMusic");
-const playBtn = document.getElementById("playMusicBtn");
 
-playBtn.addEventListener("click", () => {
+startBtn.addEventListener("click", () => {
   bgMusic.volume = 0.5;
   bgMusic.play();
-  playBtn.style.display = "none";
+  startScreen.style.display = "none";
 });
 
 /* Floating hearts */
@@ -189,4 +205,12 @@ document.getElementById("yesBtn").addEventListener("click", () => {
       You just made my forever complete 🤍<br><br>
       Thank you for choosing me, today and for a lifetime.<br><br>
       I promise to love you, stand by you,
-      and ch
+      and choose you — always.
+    </p>
+    <p><strong>— Neha</strong></p>
+  `;
+});
+</script>
+
+</body>
+</html>
