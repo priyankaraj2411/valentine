@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>For My Love ❤️</title>
 
 <style>
@@ -19,20 +19,20 @@ body {
 
 /* Floating hearts */
 .heart {
-  position: absolute;
-  color: rgba(255, 0, 100, 0.6);
-  font-size: 20px;
+  position: fixed;
+  bottom: -20px;
   animation: float 6s linear infinite;
+  opacity: 0.8;
 }
 
 @keyframes float {
-  from { transform: translateY(100vh); opacity: 1; }
-  to { transform: translateY(-10vh); opacity: 0; }
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
 }
 
 .container {
   background: white;
-  padding: 30px;
+  padding: 28px;
   border-radius: 22px;
   width: 90%;
   max-width: 420px;
@@ -51,12 +51,7 @@ p {
 
 /* Question */
 .question-wrapper {
-  margin-top: 20px;
-}
-
-.question-intro {
-  font-size: 15px;
-  color: #555;
+  margin-top: 18px;
 }
 
 .question {
@@ -74,9 +69,11 @@ p {
 
 /* Buttons */
 .buttons {
-  margin-top: 22px;
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
   position: relative;
-  height: 60px;
 }
 
 button {
@@ -84,56 +81,56 @@ button {
   border: none;
   border-radius: 25px;
   font-size: 16px;
-  cursor: pointer;
 }
 
 .yes {
   background: #ff4d6d;
   color: white;
-  margin-right: 40px;
+  cursor: pointer;
 }
 
 .no {
   background: #ccc;
   position: absolute;
-  left: 220px;
+  right: 0;
+  pointer-events: none; /* 🔒 NEVER clickable */
 }
 
 /* Tap hint */
 .tap-hint {
   position: fixed;
-  bottom: 20px;
-  background: rgba(0,0,0,0.6);
+  bottom: 18px;
+  background: rgba(0,0,0,0.65);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 14px;
-  animation: blink 1.5s infinite;
-  z-index: 5;
+  animation: blink 1.4s infinite;
+  z-index: 10;
 }
 
 @keyframes blink {
-  0% { opacity: 0.4; }
+  0% { opacity: .4; }
   50% { opacity: 1; }
-  100% { opacity: 0.4; }
+  100% { opacity: .4; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO (never removed from DOM) -->
-<audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5b8b6fdd2b.mp3" type="audio/mpeg">
+<!-- AUDIO (never removed) -->
+<audio id="bgMusic" preload="auto" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/04/06/audio_34f8cba0c7.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="heartbeat">
-  <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4e61b6c65c.mp3" type="audio/mpeg">
+<audio id="heartbeat" preload="auto">
+  <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_8f3e6b6a25.mp3" type="audio/mpeg">
 </audio>
 
 <div class="tap-hint" id="tapHint">Tap anywhere 💖</div>
 
-<div class="container" id="mainCard">
+<div class="container" id="card">
   <h1>Hey My Love 💖</h1>
 
   <p>
@@ -150,12 +147,7 @@ button {
   </p>
 
   <div class="question-wrapper">
-    <div class="question-intro">
-      And today… I just have one important question for you
-    </div>
-    <div class="question">
-      Will you be my Valentine? ❤️
-    </div>
+    <div class="question">Will you be my Valentine? ❤️</div>
   </div>
 
   <div class="buttons">
@@ -167,17 +159,17 @@ button {
 </div>
 
 <script>
+/* MUSIC — guaranteed */
 const music = document.getElementById("bgMusic");
 const heartbeat = document.getElementById("heartbeat");
 const tapHint = document.getElementById("tapHint");
-let musicStarted = false;
 
-/* Start music on FIRST interaction anywhere */
-document.addEventListener("click", () => {
-  if (!musicStarted) {
+let started = false;
+document.addEventListener("pointerdown", () => {
+  if (!started) {
     music.play();
     tapHint.style.display = "none";
-    musicStarted = true;
+    started = true;
   }
 }, { once: true });
 
@@ -187,38 +179,47 @@ setInterval(() => {
   heart.className = "heart";
   heart.innerHTML = "❤️";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 15 + "px";
+  heart.style.fontSize = Math.random() * 22 + 14 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 300);
+}, 350);
 
-/* NO button logic */
+/* NO button movement */
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 
-const originalLeft = noBtn.offsetLeft;
-const originalTop = noBtn.offsetTop;
+const originalRight = noBtn.style.right = "0px";
 
 function moveNo() {
-  noBtn.style.left = Math.random() * 200 + "px";
+  noBtn.style.right = Math.random() * 140 + "px";
   noBtn.style.top = Math.random() * 40 + "px";
 }
 
 function resetNo() {
-  noBtn.style.left = originalLeft + "px";
-  noBtn.style.top = originalTop + "px";
+  noBtn.style.right = originalRight;
+  noBtn.style.top = "0px";
 }
 
-noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
-yesBtn.addEventListener("mouseover", resetNo);
+document.addEventListener("pointermove", (e) => {
+  const rect = noBtn.getBoundingClientRect();
+  if (
+    e.clientX > rect.left - 20 &&
+    e.clientX < rect.right + 20 &&
+    e.clientY > rect.top - 20 &&
+    e.clientY < rect.bottom + 20
+  ) {
+    moveNo();
+  }
+});
 
-/* YES click */
+yesBtn.addEventListener("mouseenter", resetNo);
+
+/* YES */
 yesBtn.addEventListener("click", () => {
   heartbeat.play();
 
   setTimeout(() => {
-    document.getElementById("mainCard").innerHTML = `
+    document.getElementById("card").innerHTML = `
       <h1>💍🤍</h1>
       <p style="font-size:18px;">
         You just made my forever complete 🤍<br><br>
