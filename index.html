@@ -1,129 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>For Avi ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Avi ❤️</title>
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      overflow: hidden;
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Segoe UI", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+}
 
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      position: relative;
-    }
+/* Floating hearts */
+.heart {
+  position: absolute;
+  color: rgba(255, 0, 100, 0.6);
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
 
-    h1 {
-      color: #e63946;
-    }
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
 
-    p {
-      font-size: 16px;
-      line-height: 1.6;
-    }
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 22px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 2;
+}
 
-    button {
-      padding: 12px 22px;
-      border: none;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 10px;
-    }
+h1 {
+  color: #e63946;
+  margin-bottom: 10px;
+}
 
-    .yes {
-      background: #ff4d6d;
-      color: white;
-    }
+p {
+  font-size: 16px;
+  line-height: 1.6;
+}
 
-    .no {
-      background: #ccc;
-      position: absolute;
-    }
-  </style>
+/* Important question style */
+.question-wrapper {
+  margin-top: 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.question-intro {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.question {
+  font-size: 22px;
+  color: #e63946;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+button {
+  padding: 12px 26px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 12px 8px 0;
+}
+
+.yes {
+  background: #ff4d6d;
+  color: white;
+}
+
+.no {
+  background: #ccc;
+  position: absolute;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>Will You Be My Valentine For Lifetime? ❤️</h1>
+<!-- Background music -->
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
-    <p>
-      Avi,<br><br>
-      You are not just my love — you are my life, my world, my everything.  
-      Tumhare bina sab kuch adhoora sa lagta hai,
-      jaise roshni ke bina andhera.
-    </p>
+<div class="container">
+  <h1>Hey My Love 💖</h1>
 
-    <button class="yes" onclick="yesClicked()">Yes 💖</button>
-    <button class="no" id="noBtn">No 😜</button>
+  <p>
+    <strong>Avi,</strong><br><br>
+    You are not just my love — you are my soul, my home, my forever.  
+    Tumhare bina zindagi jaise khamosh si lagti hai,  
+    jaise dil dhadak raha ho par jeena bhool gaya ho.  
+    <br><br>
+    You make my ordinary days feel special,  
+    my weakest moments feel stronger,  
+    and my future feel beautiful.  
+    <br><br>
+    Loving you isn’t a decision I made…  
+    <strong>it’s a feeling I breathe every day.</strong>
+  </p>
 
-    <p><strong>Yours, always<br>— Neha</strong></p>
+  <!-- Important Question -->
+  <div class="question-wrapper">
+    <div class="question-intro">
+      And today… I just have one important question for you
+    </div>
+    <div class="question">
+      Will you be my Valentine? ❤️
+    </div>
   </div>
 
-  <script>
-    const noBtn = document.getElementById("noBtn");
+  <button class="yes" id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+  <button class="no" id="noBtn">No 😜</button>
 
-    function moveButton() {
-      const x = Math.random() * 250;
-      const y = Math.random() * 250;
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-    }
+  <p style="margin-top:18px;"><strong>Yours, always<br>— Neha</strong></p>
+</div>
 
-    // Laptop
-    noBtn.addEventListener("mouseover", moveButton);
+<script>
+/* Floating hearts */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "❤️";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = Math.random() * 20 + 15 + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 300);
 
-    // Mobile
-    noBtn.addEventListener("touchstart", moveButton);
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
 
-    function yesClicked() {
-      document.body.innerHTML = `
-        <div style="
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          height:100vh;
-          text-align:center;
-          font-family:'Segoe UI', sans-serif;
-          background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-          padding:20px;
-        ">
-          <div style="
-            background:white;
-            padding:30px;
-            border-radius:20px;
-            max-width:420px;
-            box-shadow:0 10px 25px rgba(0,0,0,0.2);
-          ">
-            <h1>💍🤍</h1>
-            <p style="font-size:18px;">
-              You just made my forever complete 🤍<br><br>
-              Thank you for choosing me, today and for a lifetime.<br><br>
-              I promise to love you, stand by you,
-              and choose you — always.
-            </p>
-            <p><strong>— Neha</strong></p>
-          </div>
-        </div>
-      `;
-    }
-  </script>
+/* Initial position */
+const initialX = 230;
+const initialY = 360;
+noBtn.style.left = initialX + "px";
+noBtn.style.top = initialY + "px";
+
+/* Move NO */
+function moveNo() {
+  const x = Math.random() * 260;
+  const y = Math.random() * 260;
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+function resetNo() {
+  noBtn.style.left = initialX + "px";
+  noBtn.style.top = initialY + "px";
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+yesBtn.addEventListener("mouseover", resetNo);
+
+function yesClicked() {
+  document.body.innerHTML = `
+    <div style="
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+      background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+      font-family:'Segoe UI', sans-serif;
+      padding:20px;
+      text-align:center;
+    ">
+      <div style="
+        background:white;
+        padding:30px;
+        border-radius:20px;
+        max-width:420px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.2);
+      ">
+        <h1>💍🤍</h1>
+        <p style="font-size:18px;">
+          You just made my forever complete 🤍<br><br>
+          Thank you for choosing me, today and for a lifetime.<br><br>
+          I promise to love you, stand by you,
+          and choose you — always.
+        </p>
+        <p><strong>— Neha</strong></p>
+      </div>
+    </div>
+  `;
+}
+</script>
 
 </body>
 </html>
