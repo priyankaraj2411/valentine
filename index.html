@@ -77,9 +77,6 @@ p {
   margin-top: 22px;
   position: relative;
   height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 button {
@@ -99,7 +96,7 @@ button {
 .no {
   background: #ccc;
   position: absolute;
-  left: 220px; /* initial proper alignment */
+  left: 220px;
 }
 
 /* Tap hint */
@@ -125,19 +122,18 @@ button {
 
 <body>
 
-<!-- Romantic music -->
-<audio id="bgMusic" autoplay loop muted>
+<!-- AUDIO (never removed from DOM) -->
+<audio id="bgMusic" loop>
   <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5b8b6fdd2b.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Heartbeat -->
 <audio id="heartbeat">
   <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_4e61b6c65c.mp3" type="audio/mpeg">
 </audio>
 
 <div class="tap-hint" id="tapHint">Tap anywhere 💖</div>
 
-<div class="container" onclick="startMusic()">
+<div class="container" id="mainCard">
   <h1>Hey My Love 💖</h1>
 
   <p>
@@ -163,7 +159,7 @@ button {
   </div>
 
   <div class="buttons">
-    <button class="yes" id="yesBtn" onclick="yesClicked()">Yes 💖</button>
+    <button class="yes" id="yesBtn">Yes 💖</button>
     <button class="no" id="noBtn">No 😜</button>
   </div>
 
@@ -171,19 +167,19 @@ button {
 </div>
 
 <script>
-/* Music + hint */
-let musicStarted = false;
 const music = document.getElementById("bgMusic");
+const heartbeat = document.getElementById("heartbeat");
 const tapHint = document.getElementById("tapHint");
+let musicStarted = false;
 
-function startMusic() {
+/* Start music on FIRST interaction anywhere */
+document.addEventListener("click", () => {
   if (!musicStarted) {
-    music.muted = false;
     music.play();
     tapHint.style.display = "none";
     musicStarted = true;
   }
-}
+}, { once: true });
 
 /* Floating hearts */
 setInterval(() => {
@@ -204,10 +200,8 @@ const originalLeft = noBtn.offsetLeft;
 const originalTop = noBtn.offsetTop;
 
 function moveNo() {
-  const x = Math.random() * 200;
-  const y = Math.random() * 40;
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+  noBtn.style.left = Math.random() * 200 + "px";
+  noBtn.style.top = Math.random() * 40 + "px";
 }
 
 function resetNo() {
@@ -220,39 +214,22 @@ noBtn.addEventListener("touchstart", moveNo);
 yesBtn.addEventListener("mouseover", resetNo);
 
 /* YES click */
-function yesClicked() {
-  document.getElementById("heartbeat").play();
+yesBtn.addEventListener("click", () => {
+  heartbeat.play();
 
-  document.body.innerHTML = `
-    <div style="
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-      background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-      font-family:'Segoe UI', sans-serif;
-      padding:20px;
-      text-align:center;
-    ">
-      <div style="
-        background:white;
-        padding:30px;
-        border-radius:20px;
-        max-width:420px;
-        box-shadow:0 10px 25px rgba(0,0,0,0.2);
-      ">
-        <h1>💍🤍</h1>
-        <p style="font-size:18px;">
-          You just made my forever complete 🤍<br><br>
-          Thank you for choosing me, today and for a lifetime.<br><br>
-          I promise to love you, stand by you,
-          and choose you — always.
-        </p>
-        <p><strong>— Neha</strong></p>
-      </div>
-    </div>
-  `;
-}
+  setTimeout(() => {
+    document.getElementById("mainCard").innerHTML = `
+      <h1>💍🤍</h1>
+      <p style="font-size:18px;">
+        You just made my forever complete 🤍<br><br>
+        Thank you for choosing me, today and for a lifetime.<br><br>
+        I promise to love you, stand by you,
+        and choose you — always.
+      </p>
+      <p><strong>— Neha</strong></p>
+    `;
+  }, 300);
+});
 </script>
 
 </body>
