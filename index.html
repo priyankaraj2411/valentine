@@ -11,9 +11,10 @@ body {
   font-family: Arial, sans-serif;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* START BUTTON SCREEN */
+/* START SCREEN */
 #startScreen {
   position: fixed;
   inset: 0;
@@ -35,13 +36,12 @@ body {
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
 
-/* MAIN PAGE (hidden initially) */
+/* MAIN PAGE */
 #mainPage {
   display: none;
   padding: 20px;
 }
 
-/* CARD */
 .container {
   background: white;
   margin: 40px auto;
@@ -83,7 +83,6 @@ p {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 10px;
 }
 
 .yes, .no {
@@ -101,6 +100,18 @@ p {
 .no {
   background: #ccc;
   position: relative;
+}
+
+/* FLOATING HEARTS */
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+
+/* FLOWER FALL */
+@keyframes fall {
+  from { transform: translateY(0); }
+  to { transform: translateY(120vh); }
 }
 </style>
 </head>
@@ -133,17 +144,22 @@ p {
       <strong>it’s a feeling I breathe every day.</strong>
     </p>
 
-    <div class="question">Will you be my Valentine? ❤️</div>
+    <div class="question">
+  I have an important question for you…<br>
+  <span style="font-size:24px;">Will you be my Valentine forever? ❤️</span>
+</div>
 
     <div class="buttons">
       <button class="yes" id="yesBtn">Yes 💖</button>
       <button class="no" id="noBtn">No 😜</button>
     </div>
 
-    <p style="margin-top:20px;"><strong>Yours, always<br>— Neha</strong></p>
+    <p style="margin-top:20px;">
+      <strong>Yours, always<br>— Neha</strong>
+    </p>
   </div>
 </div>
-
+  
 <script>
 const startBtn = document.getElementById("startBtn");
 const startScreen = document.getElementById("startScreen");
@@ -151,24 +167,39 @@ const mainPage = document.getElementById("mainPage");
 const bgMusic = document.getElementById("bgMusic");
 const noBtn = document.getElementById("noBtn");
 
+/* START */
 startBtn.onclick = () => {
   startScreen.style.display = "none";
   mainPage.style.display = "block";
-  bgMusic.play();
+  bgMusic.play().catch(()=>{});
 };
 
-/* NO button escape */
-noBtn.addEventListener("mouseenter", () => {
-  noBtn.style.transform =
-    `translate(${Math.random()*150-75}px, ${Math.random()*80-40}px)`;
-});
-noBtn.addEventListener("touchstart", () => {
-  noBtn.style.transform =
-    `translate(${Math.random()*150-75}px, ${Math.random()*80-40}px)`;
-});
+/* FLOATING HEARTS */
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.innerHTML = "❤️";
+  heart.style.position = "fixed";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.bottom = "-20px";
+  heart.style.fontSize = "20px";
+  heart.style.animation = "floatUp 6s linear";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 700);
 
-/* YES */
+/* NO ESCAPE */
+function escapeNo() {
+  noBtn.style.transform =
+    `translate(${Math.random()*140-70}px, ${Math.random()*80-40}px)`;
+}
+noBtn.addEventListener("mouseenter", escapeNo);
+noBtn.addEventListener("touchstart", escapeNo);
+
+/* YES CLICK */
 document.getElementById("yesBtn").onclick = () => {
+  roseBlast();
+  roseShower();
+
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
@@ -180,6 +211,32 @@ document.getElementById("yesBtn").onclick = () => {
     <p><strong>— Neha</strong></p>
   `;
 };
+
+/* 🌹 ROSE PETAL EFFECTS */
+function roseBlast() {
+  for (let i = 0; i < 25; i++) {
+    createRose(window.innerWidth / 2, window.innerHeight / 2);
+  }
+}
+
+function roseShower() {
+  const shower = setInterval(() => {
+    createRose(Math.random() * window.innerWidth, -20);
+  }, 250);
+  setTimeout(() => clearInterval(shower), 4000);
+}
+
+function createRose(x, y) {
+  const rose = document.createElement("div");
+  rose.innerHTML = "🌹";
+  rose.style.position = "fixed";
+  rose.style.left = x + "px";
+  rose.style.top = y + "px";
+  rose.style.fontSize = "26px";
+  rose.style.animation = "fall 4s linear";
+  document.body.appendChild(rose);
+  setTimeout(() => rose.remove(), 4000);
+}
 </script>
 
 </body>
