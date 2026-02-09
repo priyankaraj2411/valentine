@@ -21,7 +21,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
   z-index: 100;
 }
 
@@ -52,9 +51,7 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-h1 {
-  color: #e63946;
-}
+h1 { color: #e63946; }
 
 p {
   font-size: 16px;
@@ -72,10 +69,14 @@ p {
 
 .question {
   font-size: 18px;
-  font-weight: normal;
-  color: #e63946;
+  color: #333;
   margin: 20px 0;
-  animation: heartbeat 3.5s infinite;
+  animation: heartbeat 3s infinite;
+}
+
+.question strong {
+  color: #e63946;
+  font-size: 22px;
 }
 
 /* BUTTONS */
@@ -85,7 +86,7 @@ p {
   gap: 20px;
 }
 
-.yes, .no {
+button {
   padding: 12px 26px;
   border: none;
   border-radius: 25px;
@@ -108,68 +109,62 @@ p {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
-/* FLOWER FALL */
+/* ROSE FALL */
 @keyframes fall {
   from { transform: translateY(0); }
   to { transform: translateY(120vh); }
+}
+
+/* CRACKER BLAST */
+@keyframes explode {
+  from { transform: translate(0,0) scale(1); opacity:1; }
+  to { transform: translate(var(--x), var(--y)) scale(0.4); opacity:0; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- START SCREEN -->
+<!-- START -->
 <div id="startScreen">
   <button id="startBtn">Press with Love 💖</button>
 </div>
 
 <!-- MUSIC -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="blastSound" src="blast.mp3"></audio>
 
-<!-- MAIN PAGE -->
+<!-- MAIN -->
 <div id="mainPage">
   <div class="container" id="card">
     <h1>Hey My Love 💖</h1>
 
     <p>
-      You are not just my love — you are my soul, my home, my forever.  
-      Tumhare bina zindagi jaise khamosh si lagti hai,  
-      jaise dil dhadak raha ho par jeena bhool gaya ho.
-      <br><br>
-      You make my ordinary days feel special,  
-      my weakest moments feel stronger,  
-      and my future feel beautiful.
-      <br><br>
-      Loving you isn’t a decision I made…  
+      You are not just my love — you are my soul, my home, my forever.
+      Loving you isn’t a decision I made…
       <strong>it’s a feeling I breathe every day.</strong>
     </p>
 
-   <div class="question">
-  <span class="question-text">
-    I have an important question for you…
-  </span><br>
-  <span class="valentine-question">
-    Will you be my Valentine forever? ❤️
-  </span>
-</div>
-
+    <div class="question">
+      I have an important question for you…<br>
+      <strong>Will you be my Valentine forever? ❤️</strong>
+    </div>
 
     <div class="buttons">
       <button class="yes" id="yesBtn">Yes 💖</button>
       <button class="no" id="noBtn">No 😜</button>
     </div>
 
-    <p style="margin-top:20px;">
-      <strong>Yours, always<br>— Neha</strong>
-    </p>
+    <p><strong>Yours, always<br>— Neha</strong></p>
   </div>
 </div>
-  
+
 <script>
 const startBtn = document.getElementById("startBtn");
 const startScreen = document.getElementById("startScreen");
 const mainPage = document.getElementById("mainPage");
 const bgMusic = document.getElementById("bgMusic");
+const blastSound = document.getElementById("blastSound");
 const noBtn = document.getElementById("noBtn");
 
 /* START */
@@ -190,58 +185,70 @@ setInterval(() => {
   heart.style.animation = "floatUp 6s linear";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 700);
+}, 800);
 
 /* NO ESCAPE */
 function escapeNo() {
   noBtn.style.transform =
-    `translate(${Math.random()*140-70}px, ${Math.random()*80-40}px)`;
+    `translate(${Math.random()*160-80}px, ${Math.random()*120-60}px)`;
 }
 noBtn.addEventListener("mouseenter", escapeNo);
 noBtn.addEventListener("touchstart", escapeNo);
 
-/* YES CLICK */
+/* CRACKER BLAST */
+function crackerBlast() {
+  blastSound.currentTime = 0;
+  blastSound.play().catch(()=>{});
+
+  const emojis = ["💥","🎉","✨","🔥","🌟"];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement("div");
+    c.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+    c.style.position = "fixed";
+    c.style.left = "50%";
+    c.style.top = "50%";
+    c.style.fontSize = "26px";
+
+    c.style.setProperty("--x", `${(Math.random()-0.5)*700}px`);
+    c.style.setProperty("--y", `${(Math.random()-0.5)*700}px`);
+    c.style.animation = "explode 1.2s ease-out forwards";
+
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1200);
+  }
+}
+
+/* ROSES */
+function roseShower() {
+  const interval = setInterval(() => {
+    const rose = document.createElement("div");
+    rose.innerHTML = "🌹";
+    rose.style.position = "fixed";
+    rose.style.left = Math.random() * window.innerWidth + "px";
+    rose.style.top = "-20px";
+    rose.style.fontSize = "26px";
+    rose.style.animation = "fall 4s linear";
+    document.body.appendChild(rose);
+    setTimeout(() => rose.remove(), 4000);
+  }, 250);
+
+  setTimeout(() => clearInterval(interval), 4000);
+}
+
+/* YES */
 document.getElementById("yesBtn").onclick = () => {
-  roseBlast();
+  crackerBlast();
   roseShower();
 
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
       You just made my forever complete 🤍<br><br>
-      Thank you for choosing me, today and for a lifetime.<br><br>
-      I promise to love you, stand by you,
-      and choose you — always.
+      I promise to love you, today and always.
     </p>
     <p><strong>— Neha</strong></p>
   `;
 };
-
-/* 🌹 ROSE PETAL EFFECTS */
-function roseBlast() {
-  for (let i = 0; i < 25; i++) {
-    createRose(window.innerWidth / 2, window.innerHeight / 2);
-  }
-}
-
-function roseShower() {
-  const shower = setInterval(() => {
-    createRose(Math.random() * window.innerWidth, -20);
-  }, 250);
-  setTimeout(() => clearInterval(shower), 4000);
-}
-
-function createRose(x, y) {
-  const rose = document.createElement("div");
-  rose.innerHTML = "🌹";
-  rose.style.position = "fixed";
-  rose.style.left = x + "px";
-  rose.style.top = y + "px";
-  rose.style.fontSize = "26px";
-  rose.style.animation = "fall 4s linear";
-  document.body.appendChild(rose);
-  setTimeout(() => rose.remove(), 4000);
-}
 </script>
 
 </body>
