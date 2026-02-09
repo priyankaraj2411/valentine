@@ -17,22 +17,6 @@ body {
   overflow: hidden;
 }
 
-/* Tap overlay */
-#tapScreen {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
-  z-index: 999;
-  cursor: pointer;
-  text-align: center;
-  padding: 20px;
-}
-
 .container {
   background: white;
   padding: 25px;
@@ -79,13 +63,12 @@ button {
   border: none;
   border-radius: 25px;
   font-size: 16px;
-  position: absolute;
-  top: 0;
 }
 
 .yes {
   background: #ff4d6d;
   color: white;
+  position: absolute;
   left: 50%;
   transform: translateX(-120%);
   cursor: pointer;
@@ -93,10 +76,23 @@ button {
 
 .no {
   background: #ccc;
+  position: absolute;
   left: 50%;
   transform: translateX(20%);
   cursor: pointer;
   transition: transform 0.15s ease;
+}
+
+/* Music button */
+#playMusicBtn {
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  cursor: pointer;
 }
 
 /* Floating hearts */
@@ -116,14 +112,13 @@ button {
 
 <body>
 
-<!-- Tap to start music -->
-<div id="tapScreen">Tap anywhere 💖</div>
-
-<!-- Background music (local file) -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
 <div class="container" id="card">
   <h1>Hey My Love 💖</h1>
+
+  <!-- Romantic music button -->
+  <button id="playMusicBtn">Feel My Heart 💖</button>
 
   <p>
     You are not just my love — you are my soul, my home, my forever.  
@@ -151,23 +146,14 @@ button {
 </div>
 
 <script>
-/* Mobile-safe music start */
-const tapScreen = document.getElementById("tapScreen");
+/* Music play (mobile safe) */
 const bgMusic = document.getElementById("bgMusic");
+const playBtn = document.getElementById("playMusicBtn");
 
-tapScreen.addEventListener("click", () => {
+playBtn.addEventListener("click", () => {
   bgMusic.volume = 0.5;
-
-  const playPromise = bgMusic.play();
-  if (playPromise !== undefined) {
-    playPromise
-      .then(() => {
-        tapScreen.style.display = "none";
-      })
-      .catch(() => {
-        alert("Tap once more to start music 💖");
-      });
-  }
+  bgMusic.play();
+  playBtn.style.display = "none";
 });
 
 /* Floating hearts */
@@ -203,12 +189,4 @@ document.getElementById("yesBtn").addEventListener("click", () => {
       You just made my forever complete 🤍<br><br>
       Thank you for choosing me, today and for a lifetime.<br><br>
       I promise to love you, stand by you,
-      and choose you — always.
-    </p>
-    <p><strong>— Neha</strong></p>
-  `;
-});
-</script>
-
-</body>
-</html>
+      and ch
