@@ -29,6 +29,8 @@ body {
   font-size: 22px;
   z-index: 999;
   cursor: pointer;
+  text-align: center;
+  padding: 20px;
 }
 
 .container {
@@ -50,12 +52,12 @@ p {
   line-height: 1.6;
 }
 
-/* 💓 Visual heartbeat animation */
+/* 💓 Slow heartbeat animation */
 @keyframes heartbeat {
   0% { transform: scale(1); }
-  25% { transform: scale(1.05); }
+  20% { transform: scale(1.04); }
   40% { transform: scale(1); }
-  60% { transform: scale(1.05); }
+  60% { transform: scale(1.04); }
   100% { transform: scale(1); }
 }
 
@@ -64,7 +66,7 @@ p {
   color: #e63946;
   font-weight: bold;
   margin: 20px 0;
-  animation: heartbeat 1.6s infinite;
+  animation: heartbeat 2.6s infinite;
 }
 
 .buttons {
@@ -117,7 +119,7 @@ button {
 <!-- Tap to start music -->
 <div id="tapScreen">Tap anywhere 💖</div>
 
-<!-- Background music -->
+<!-- Background music (local file) -->
 <audio id="bgMusic" src="music.mp3" loop></audio>
 
 <div class="container" id="card">
@@ -143,18 +145,29 @@ button {
     <button class="no" id="noBtn">No 😜</button>
   </div>
 
-  <p style="margin-top:20px;"><strong>Yours, always<br>— Neha</strong></p>
+  <p style="margin-top:20px;">
+    <strong>Yours, always<br>— Neha</strong>
+  </p>
 </div>
 
 <script>
-/* Start music on tap */
+/* Mobile-safe music start */
 const tapScreen = document.getElementById("tapScreen");
 const bgMusic = document.getElementById("bgMusic");
 
 tapScreen.addEventListener("click", () => {
   bgMusic.volume = 0.5;
-  bgMusic.play();
-  tapScreen.style.display = "none";
+
+  const playPromise = bgMusic.play();
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        tapScreen.style.display = "none";
+      })
+      .catch(() => {
+        alert("Tap once more to start music 💖");
+      });
+  }
 });
 
 /* Floating hearts */
