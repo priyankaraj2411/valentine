@@ -21,7 +21,7 @@ body {
 #tapScreen {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   color: white;
   display: flex;
   justify-content: center;
@@ -82,7 +82,7 @@ button {
   left: 50%;
   transform: translateX(20%);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: transform 0.15s ease;
 }
 
 /* Floating hearts */
@@ -102,16 +102,16 @@ button {
 
 <body>
 
-<!-- TAP SCREEN -->
 <div id="tapScreen">Tap anywhere 💖</div>
 
-<!-- MUSIC -->
+<!-- Background music -->
 <audio id="bgMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5f2d43db3b.mp3" type="audio/mpeg">
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5f2d43db3b.mp3">
 </audio>
 
-<audio id="heartBeat">
-  <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_8b2c9d56b7.mp3" type="audio/mpeg">
+<!-- Heartbeat -->
+<audio id="heartbeat" loop>
+  <source src="https://cdn.pixabay.com/audio/2021/08/04/audio_8b2c9d56b7.mp3">
 </audio>
 
 <div class="container" id="card">
@@ -141,13 +141,16 @@ button {
 </div>
 
 <script>
-/* Start music after tap */
 const tapScreen = document.getElementById("tapScreen");
 const bgMusic = document.getElementById("bgMusic");
-const heartBeat = document.getElementById("heartBeat");
+const heartbeat = document.getElementById("heartbeat");
 
+/* Start music + heartbeat together */
 tapScreen.addEventListener("click", () => {
+  bgMusic.volume = 0.5;
+  heartbeat.volume = 0.25;   // soft heartbeat feel
   bgMusic.play();
+  heartbeat.play();
   tapScreen.style.display = "none";
 });
 
@@ -169,8 +172,8 @@ function escapeNo() {
   const y = Math.random() * 80 - 40;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
-["mouseenter", "mousedown", "touchstart"].forEach(evt =>
-  noBtn.addEventListener(evt, escapeNo)
+["mouseenter", "mousedown", "touchstart"].forEach(e =>
+  noBtn.addEventListener(e, escapeNo)
 );
 noBtn.addEventListener("click", e => {
   e.preventDefault();
@@ -179,7 +182,9 @@ noBtn.addEventListener("click", e => {
 
 /* YES click */
 document.getElementById("yesBtn").addEventListener("click", () => {
-  heartBeat.play();
+  heartbeat.pause();   // stop heartbeat
+  heartbeat.currentTime = 0;
+
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
