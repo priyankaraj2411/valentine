@@ -41,29 +41,38 @@ p {
   margin: 20px 0;
 }
 
+/* Buttons wrapper */
 .buttons {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+  position: relative;
+  height: 60px;
 }
 
+/* Common button style */
 button {
   padding: 12px 26px;
   border: none;
   border-radius: 25px;
   font-size: 16px;
+  position: absolute;
+  top: 0;
 }
 
+/* YES */
 .yes {
   background: #ff4d6d;
   color: white;
+  left: 50%;
+  transform: translateX(-120%);
   cursor: pointer;
 }
 
+/* NO */
 .no {
   background: #ccc;
+  left: 50%;
+  transform: translateX(20%);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 /* Floating hearts */
@@ -83,7 +92,7 @@ button {
 
 <body>
 
-<!-- Music -->
+<!-- Background Music -->
 <audio id="bgMusic" loop>
   <source src="https://cdn.pixabay.com/audio/2022/04/06/audio_34f8cba0c7.mp3" type="audio/mpeg">
 </audio>
@@ -111,11 +120,11 @@ button {
     <button class="no" id="noBtn">No 😜</button>
   </div>
 
-  <p style="margin-top:15px;"><strong>Yours, always<br>— Neha</strong></p>
+  <p style="margin-top:20px;"><strong>Yours, always<br>— Neha</strong></p>
 </div>
 
 <script>
-/* Music: plays on first click anywhere */
+/* Music – guaranteed to work */
 const music = document.getElementById("bgMusic");
 document.body.addEventListener("click", () => {
   music.play();
@@ -130,37 +139,31 @@ setInterval(() => {
   heart.style.fontSize = Math.random() * 20 + 14 + "px";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 400);
+}, 500);
 
-/* NO button logic */
+/* NO button logic — BULLETPROOF */
 const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
 
-function moveNo() {
-  const x = Math.random() * 80 - 40;
-  const y = Math.random() * 40 - 20;
+function escapeNo() {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 80 - 40;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-function resetNo() {
-  noBtn.style.transform = "translate(0, 0)";
-}
+/* Move BEFORE click */
+noBtn.addEventListener("mouseenter", escapeNo);
+noBtn.addEventListener("touchstart", escapeNo);
+noBtn.addEventListener("mousedown", escapeNo);
 
-/* Float on hover / touch */
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
-
-/* NEVER allow click */
+/* Hard block click */
 noBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  moveNo();
+  e.stopPropagation();
+  escapeNo();
 });
 
-/* Bring NO back when YES hovered */
-yesBtn.addEventListener("mouseenter", resetNo);
-
 /* YES click */
-yesBtn.addEventListener("click", () => {
+document.getElementById("yesBtn").addEventListener("click", () => {
   document.getElementById("card").innerHTML = `
     <h1>💍🤍</h1>
     <p style="font-size:18px;">
